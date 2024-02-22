@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "ba273c8e-d693-4a6b-93ce-0f548611c592",
+		"name": "Requisições do Aquecimento",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2645049"
+	},
+	"item": [
+		{
+			"name": "Retornar o valor do PI",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('deve retornar o valor do PI', () => {",
+							"    pm.response.to.have.status(200)",
+							"    const { pi } = pm.response.json()",
+							"    pm.expect(`${pi}`.substring(0, 6)).to.equal('3.1415')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/pi",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"pi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Somar dois números válidos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('numero1', 12)",
+							"pm.collectionVariables.set('numero2', 28)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('deve somar corretamente dois números', () => {",
+							"    pm.response.to.have.status(200)",
+							"    const n1 = pm.collectionVariables.get('numero1')",
+							"    const n2 = pm.collectionVariables.get('numero2')",
+							"    const resultadoEsperado = n1 + n2",
+							"    const { resultado } = pm.response.json()",
+							"    pm.expect(resultado).to.equal(resultadoEsperado)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/somar/{{numero1}}/{{numero2}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"somar",
+						"{{numero1}}",
+						"{{numero2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Somar números inválidos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('numero1', 'banana')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('não deve somar quando um dos valores for inválido', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { mensagem } = pm.response.json()",
+							"    pm.expect(mensagem).to.equal('Números inválidos!')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/somar/{{numero1}}/{{numero2}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"somar",
+						"{{numero1}}",
+						"{{numero2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dividir dois números válidos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('numero1', 20)",
+							"pm.collectionVariables.set('numero2', 5)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('deve dividir dois números válidos', () => {",
+							"    pm.response.to.have.status(200)",
+							"    const n1 = pm.collectionVariables.get('numero1')",
+							"    const n2 = pm.collectionVariables.get('numero2')",
+							"    const resultadoEsperado = n1 / n2",
+							"    const { resultado } = pm.response.json()",
+							"    pm.expect(resultado).to.equal(resultadoEsperado)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/dividir?numero1={{numero1}}&numero2={{numero2}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"dividir"
+					],
+					"query": [
+						{
+							"key": "numero1",
+							"value": "{{numero1}}"
+						},
+						{
+							"key": "numero2",
+							"value": "{{numero2}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dividir por zero",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('numero2', 0)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('não deve dividir por zero', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { mensagem } = pm.response.json()",
+							"    pm.expect(mensagem).to.equal('O divisor não pode ser zero!')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/dividir?numero1={{numero1}}&numero2={{numero2}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"dividir"
+					],
+					"query": [
+						{
+							"key": "numero1",
+							"value": "{{numero1}}"
+						},
+						{
+							"key": "numero2",
+							"value": "{{numero2}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dividir números inválidos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('numero2', 'banana')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('não deve dividir números inválidos', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { mensagem } = pm.response.json()",
+							"    pm.expect(mensagem).to.equal('Números inválidos!')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/dividir?numero1={{numero1}}&numero2={{numero2}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"dividir"
+					],
+					"query": [
+						{
+							"key": "numero1",
+							"value": "{{numero1}}"
+						},
+						{
+							"key": "numero2",
+							"value": "{{numero2}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "numero1",
+			"value": ""
+		},
+		{
+			"key": "numero2",
+			"value": ""
+		}
+	]
+}
