@@ -5,4 +5,15 @@ export default class ContactDAO {
     const savedContact = await ContactModel.create(contact);
     return savedContact;
   }
+
+  async findByName(name: string) {
+    const contacts = await ContactModel.find<Contact>({
+      name: {
+        $regex: name,
+        $options: "i",
+      },
+    });
+
+    return contacts;
+  }
 }
