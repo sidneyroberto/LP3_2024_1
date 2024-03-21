@@ -1,0 +1,470 @@
+{
+	"info": {
+		"_postman_id": "dd72cd72-f5ce-4214-94bd-b647233f564b",
+		"name": "Contacts API Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2645049",
+		"_collection_link": "https://warped-zodiac-505842.postman.co/workspace/Contacts-API~c9db859a-2703-4921-b8ad-8557cd3af76a/collection/2645049-dd72cd72-f5ce-4214-94bd-b647233f564b?action=share&source=collection_link&creator=2645049"
+	},
+	"item": [
+		{
+			"name": "Save a new contact",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should save a valid contact', () => {",
+							"    pm.response.to.have.status(201)",
+							"    const { id } = pm.response.json()",
+							"    pm.expect(id).to.not.null",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('contactName', 'Fulano de Tal')",
+							"pm.collectionVariables.set('birthday', '1990-12-02')",
+							"pm.collectionVariables.set('startDate', '1985-01-01')",
+							"pm.collectionVariables.set('endDate', '2001-01-01')"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"{{contactName}}\",\n\t\"email\": \"fulano@email.com\",\n\t\"phone\": \"(99) 99999-9999\",\n\t\"birthday\": \"{{birthday}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/contacts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save a new contact with invalid name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should not save a contact with invalid name', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { errorMessages } = pm.response.json()",
+							"    pm.expect(errorMessages[0]).to.equal('Name cannot be empty')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"\",\n\t\"email\": \"fulano@email.com\",\n\t\"phone\": \"(99) 99999-9999\",\n\t\"birthday\": \"1990-12-02\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/contacts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save a new contact with invalid email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should not save a contact with invalid email', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { errorMessages } = pm.response.json()",
+							"    pm.expect(errorMessages[0]).to.equal('Invalid email')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Fulano de Tal\",\n\t\"email\": \"fulano.email.com\",\n\t\"phone\": \"(99) 99999-9999\",\n\t\"birthday\": \"1990-12-02\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/contacts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save a new contact with invalid phone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should not save a contact with invalid phone', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { errorMessages } = pm.response.json()",
+							"    pm.expect(errorMessages[0]).to.equal('Phone must follow pattern (00) 00000-0000')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Fulano de Tal\",\n\t\"email\": \"fulano@email.com\",\n\t\"phone\": \"9999-9999\",\n\t\"birthday\": \"1990-12-02\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/contacts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save a new contact with invalid birthday format",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should save a new contact with invalid birthday format', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { errorMessages } = pm.response.json()",
+							"    pm.expect(errorMessages[0]).to.equal('Birthday must follow pattern YYYY-MM-DD')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Fulano de Tal\",\n\t\"email\": \"fulano@email.com\",\n\t\"phone\": \"(99) 99999-9999\",\n\t\"birthday\": \"02/12/1990\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/contacts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save a new contact with invalid birthday",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const newDate = new Date()",
+							"newDate.setDate(newDate.getDate() + 10)",
+							"",
+							"// Aqui inicia o sofrimento...",
+							"let day = newDate.getDate()",
+							"day = day < 10 ? `0${day}` : day",
+							"let month = newDate.getMonth() + 1",
+							"month = month < 10 ? `0${month}` : month",
+							"const year = newDate.getFullYear()",
+							"const formattedDate = `${year}-${month}-${day}`",
+							"// ... terminou o sofrimento!",
+							"pm.collectionVariables.set('invalidBirthday', formattedDate)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should not save a new contact with birthday invalid', () => {",
+							"    pm.response.to.have.status(400)",
+							"    const { errorMessages } = pm.response.json()",
+							"    pm.expect(errorMessages[0]).to.equal('Birthday must be previous to today')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Fulano de Tal\",\n\t\"email\": \"fulano@email.com\",\n\t\"phone\": \"(99) 99999-9999\",\n\t\"birthday\": \"{{invalidBirthday}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/contacts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve contacts by full name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should retrieve correct contacts', () => {",
+							"    pm.response.to.have.status(200)",
+							"    const { contacts } = pm.response.json()",
+							"    pm.expect(contacts.length).to.greaterThan(0)",
+							"    const contactName = pm.collectionVariables.get('contactName')",
+							"    contacts.forEach((c) => {",
+							"        pm.expect(c.name.toLowerCase()).to.equal(contactName.toLowerCase())",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/contacts/name/{{contactName}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts",
+						"name",
+						"{{contactName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve contacts by part of name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const contactName = pm.collectionVariables.get('contactName')",
+							"const firstName = contactName.split(' ')[0].toLowerCase()",
+							"pm.collectionVariables.set('firstName', firstName)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should retrieve correct contacts by part of name', () => {",
+							"    pm.response.to.have.status(200)",
+							"    const { contacts } = pm.response.json()",
+							"    pm.expect(contacts.length).to.greaterThan(0)",
+							"    const firstName = pm.collectionVariables.get('firstName')",
+							"    contacts.forEach((c) => {",
+							"        const verification = c.name.toLowerCase().includes(firstName)",
+							"        pm.expect(verification).to.equal(true)",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/contacts/name/{{firstName}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts",
+						"name",
+						"{{firstName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve contacts by birthday period",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('it should retrieve correct contacts by birthday period', () => {",
+							"    pm.response.to.have.status(200)",
+							"    const { contacts } = pm.response.json()",
+							"    pm.expect(contacts.length).to.greaterThan(0)",
+							"    const start = pm.collectionVariables.get('startDate')",
+							"    const startDate = new Date(start)",
+							"    const end = pm.collectionVariables.get('endDate')",
+							"    const endDate = new Date(end)",
+							"",
+							"    contacts.forEach((c) => {",
+							"        const { birthday } = c",
+							"        const birthdayDate = new Date(birthday)",
+							"        const verification = birthdayDate >= startDate && birthdayDate <= endDate",
+							"        pm.expect(verification).to.equal(true)",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/contacts/birthday/{{startDate}}/{{endDate}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts",
+						"birthday",
+						"{{startDate}}",
+						"{{endDate}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "contactName",
+			"value": ""
+		},
+		{
+			"key": "birthday",
+			"value": ""
+		},
+		{
+			"key": "startDate",
+			"value": ""
+		},
+		{
+			"key": "endDate",
+			"value": ""
+		},
+		{
+			"key": "invalidBirthday",
+			"value": ""
+		}
+	]
+}

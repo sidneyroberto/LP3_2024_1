@@ -32,7 +32,7 @@ export const validateContactInputs = (contactObj: any) => {
   }
 
   if (!phone.match(/^\(\d{2}\)\s\d{5}-\d{4}$/)) {
-    errorMessages.push("Phone must have following pattern: (00) 00000-0000");
+    errorMessages.push("Phone must follow pattern (00) 00000-0000");
   }
 
   // yyyy-mm-dd
@@ -43,7 +43,7 @@ export const validateContactInputs = (contactObj: any) => {
       errorMessages.push("Birthday must be previous to today");
     }
   } else {
-    errorMessages.push("Invalid date format");
+    errorMessages.push("Birthday must follow pattern YYYY-MM-DD");
   }
 
   return errorMessages;
