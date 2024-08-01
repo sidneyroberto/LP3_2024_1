@@ -24,6 +24,8 @@ export const validateTodoInputs = (todoObj: any) => {
   // yyyy-mm-dd
   if (!deadline.match(/ˆ\d{4}-\d{2}-\d{2}$/)) {
     const deadlineObj = new Date(deadline);
+    console.log(deadlineObj);
+    console.log(new Date());
 
     if (deadlineObj <= new Date()) {
       errorMessages.push("Deadline must be in future");
