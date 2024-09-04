@@ -1,11 +1,14 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable prefer-arrow-callback */
-const requestOptions: Partial<Cypress.RequestOptions> = {
+const requestOptionsPOST: Partial<Cypress.RequestOptions> = {
   method: "POST",
   url: "/trabalhos",
   failOnStatusCode: false,
 };
 
-describe("Testes sobre o endpoint /trabalhos", () => {
+describe("Testes sobre o endpoint POST /trabalhos", () => {
   before(() => {
     cy.fixture("trabalho").as("trabalho");
     cy.fixture("trabalho_com_area_invalida").as("trabalhoComAreaInvalida");
@@ -27,9 +30,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("deve salvar um trabalho com dados válidos", function () {
-    requestOptions.body = this.trabalho;
+    requestOptionsPOST.body = this.trabalho;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(201);
       const { trabalho } = res.body;
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -38,9 +41,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com título vazio ou nulo", function () {
-    requestOptions.body = this.trabalhoSemTitulo;
+    requestOptionsPOST.body = this.trabalhoSemTitulo;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
@@ -50,9 +53,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com menos de 2 autores", function () {
-    requestOptions.body = this.trabalhoComUmAutor;
+    requestOptionsPOST.body = this.trabalhoComUmAutor;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
@@ -62,9 +65,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com mais de 7 autores", function () {
-    requestOptions.body = this.trabalhoComMaisDeSeteAutores;
+    requestOptionsPOST.body = this.trabalhoComMaisDeSeteAutores;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
@@ -74,9 +77,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com uma área inválida", function () {
-    requestOptions.body = this.trabalhoComAreaInvalida;
+    requestOptionsPOST.body = this.trabalhoComAreaInvalida;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
@@ -86,9 +89,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com um código inválido", function () {
-    requestOptions.body = this.trabalhoComCodigoInvalido;
+    requestOptionsPOST.body = this.trabalhoComCodigoInvalido;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
@@ -98,9 +101,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com autor com nome inválido", function () {
-    requestOptions.body = this.trabalhoComAutorComNomeInvalido;
+    requestOptionsPOST.body = this.trabalhoComAutorComNomeInvalido;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
@@ -110,9 +113,9 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com autor com gênero inválido", function () {
-    requestOptions.body = this.trabalhoComAutorComGeneroInvalido;
+    requestOptionsPOST.body = this.trabalhoComAutorComGeneroInvalido;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
@@ -122,14 +125,56 @@ describe("Testes sobre o endpoint /trabalhos", () => {
   });
 
   test("não deve salvar um trabalho com autor com CPF inválido", function () {
-    requestOptions.body = this.trabalhoComAutorComCPFInvalido;
+    requestOptionsPOST.body = this.trabalhoComAutorComCPFInvalido;
 
-    cy.request(requestOptions).then((res) => {
+    cy.request(requestOptionsPOST).then((res) => {
       expect(res.status).to.equal(400);
       const { mensagensDeErro } = res.body;
       expect(mensagensDeErro[0]).to.equal(
         "O CPF de cada autor deve conter 11 dígitos e não possuir máscara.",
       );
+    });
+  });
+});
+
+/* eslint-disable prefer-arrow-callback */
+const requestOptionsGET: Partial<Cypress.RequestOptions> = {
+  method: "GET",
+  url: "/trabalhos/area/:codArea",
+  failOnStatusCode: false,
+};
+
+describe("Testes sobre o endpoint GET /trabalhos/area/:codArea", () => {
+  before(() => {
+    cy.task("limparBancoDeDados");
+    cy.task("popularBancoDeDados");
+  });
+
+  test("deve recuperar todos os trabalhos de uma determinada área válida", () => {
+    const codArea = "CET";
+    requestOptionsGET.url = requestOptionsGET.url.replace(":codArea", codArea);
+
+    cy.request(requestOptionsGET).then((res) => {
+      expect(res.status).to.equal(200);
+      const { trabalhos } = res.body;
+
+      expect(trabalhos.length).to.greaterThan(0);
+
+      for (let i = 0; i < trabalhos.length; i++) {
+        expect(trabalhos[i].area).to.equal(codArea);
+      }
+    });
+  });
+
+  test("não deve recuperar trabalhos de uma área inválida", () => {
+    const codArea = "Saúde";
+    requestOptionsGET.url = requestOptionsGET.url.replace(":codArea", codArea);
+
+    cy.request(requestOptionsGET).then((res) => {
+      expect(res.status).to.equal(200);
+      const { trabalhos } = res.body;
+
+      expect(trabalhos.length).to.equal(0);
     });
   });
 });

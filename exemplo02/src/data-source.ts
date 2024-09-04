@@ -6,7 +6,7 @@ import { Trabalho } from "./entity/Trabalho";
 
 export const AppDataSource = new DataSource({
   type: "sqlite",
-  database: "feciaqteste",
+  database: "feciaqteste.db",
   synchronize: true,
   logging: true,
   entities: [Autor, Trabalho],
