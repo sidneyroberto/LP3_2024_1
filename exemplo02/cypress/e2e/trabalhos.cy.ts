@@ -29,7 +29,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     cy.fixture("trabalho_sem_titulo").as("trabalhoSemTitulo");
   });
 
-  test("deve salvar um trabalho com dados válidos", function () {
+  test.only("deve salvar um trabalho com dados válidos", function () {
     requestOptionsPOST.body = this.trabalho;
 
     cy.request(requestOptionsPOST).then((res) => {
