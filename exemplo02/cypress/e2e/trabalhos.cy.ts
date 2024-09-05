@@ -10,6 +10,7 @@ const requestOptionsPOST: Partial<Cypress.RequestOptions> = {
 
 describe("Testes sobre o endpoint POST /trabalhos", () => {
   before(() => {
+    cy.task("limparBancoDeDados");
     cy.fixture("trabalho").as("trabalho");
     cy.fixture("trabalho_com_area_invalida").as("trabalhoComAreaInvalida");
     cy.fixture("trabalho_com_autor_com_cpf_invalido").as(
@@ -29,7 +30,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     cy.fixture("trabalho_sem_titulo").as("trabalhoSemTitulo");
   });
 
-  test.only("deve salvar um trabalho com dados válidos", function () {
+  it.only("deve salvar um trabalho com dados válidos", function () {
     requestOptionsPOST.body = this.trabalho;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -40,7 +41,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com título vazio ou nulo", function () {
+  it("não deve salvar um trabalho com título vazio ou nulo", function () {
     requestOptionsPOST.body = this.trabalhoSemTitulo;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -52,7 +53,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com menos de 2 autores", function () {
+  it("não deve salvar um trabalho com menos de 2 autores", function () {
     requestOptionsPOST.body = this.trabalhoComUmAutor;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -64,7 +65,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com mais de 7 autores", function () {
+  it("não deve salvar um trabalho com mais de 7 autores", function () {
     requestOptionsPOST.body = this.trabalhoComMaisDeSeteAutores;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -76,7 +77,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com uma área inválida", function () {
+  it("não deve salvar um trabalho com uma área inválida", function () {
     requestOptionsPOST.body = this.trabalhoComAreaInvalida;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -88,7 +89,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com um código inválido", function () {
+  it("não deve salvar um trabalho com um código inválido", function () {
     requestOptionsPOST.body = this.trabalhoComCodigoInvalido;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -100,7 +101,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com autor com nome inválido", function () {
+  it("não deve salvar um trabalho com autor com nome inválido", function () {
     requestOptionsPOST.body = this.trabalhoComAutorComNomeInvalido;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -112,7 +113,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com autor com gênero inválido", function () {
+  it("não deve salvar um trabalho com autor com gênero inválido", function () {
     requestOptionsPOST.body = this.trabalhoComAutorComGeneroInvalido;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -124,7 +125,7 @@ describe("Testes sobre o endpoint POST /trabalhos", () => {
     });
   });
 
-  test("não deve salvar um trabalho com autor com CPF inválido", function () {
+  it("não deve salvar um trabalho com autor com CPF inválido", function () {
     requestOptionsPOST.body = this.trabalhoComAutorComCPFInvalido;
 
     cy.request(requestOptionsPOST).then((res) => {
@@ -150,7 +151,7 @@ describe("Testes sobre o endpoint GET /trabalhos/area/:codArea", () => {
     cy.task("popularBancoDeDados");
   });
 
-  test("deve recuperar todos os trabalhos de uma determinada área válida", () => {
+  it("deve recuperar todos os trabalhos de uma determinada área válida", () => {
     const codArea = "CET";
     requestOptionsGET.url = requestOptionsGET.url.replace(":codArea", codArea);
 
@@ -166,7 +167,7 @@ describe("Testes sobre o endpoint GET /trabalhos/area/:codArea", () => {
     });
   });
 
-  test("não deve recuperar trabalhos de uma área inválida", () => {
+  it("não deve recuperar trabalhos de uma área inválida", () => {
     const codArea = "Saúde";
     requestOptionsGET.url = requestOptionsGET.url.replace(":codArea", codArea);
 
