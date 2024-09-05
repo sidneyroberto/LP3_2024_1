@@ -77,6 +77,9 @@ export default defineConfig({
               trabalho.autores = autores.slice(8);
             }
 
+            const numero = i + 1;
+            trabalho.codigo = `${trabalho.area}${numero < 10 ? `0${numero}` : numero}`;
+
             await trabalhoRepo.save(trabalho);
           }
         },

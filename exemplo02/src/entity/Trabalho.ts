@@ -18,6 +18,9 @@ export class Trabalho {
   titulo: string;
 
   @Column()
+  codigo: string;
+
+  @Column()
   area: Area;
 
   @ManyToMany(() => Autor)
